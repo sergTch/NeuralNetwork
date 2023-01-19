@@ -128,18 +128,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="checkers.cpp" />
+    <ClCompile Include="layer.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mnist_loader.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="picture.cpp" />
+    <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="checkers.h" />
+    <ClInclude Include="layer.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="mnist_loader.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="picture.h" />
+    <ClInclude Include="timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

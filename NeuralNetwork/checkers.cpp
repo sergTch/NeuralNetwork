@@ -32,19 +32,19 @@ namespace checkers {
 		for (int i = 0; i < 32; i++) {
 			if (allies & (1 << i)) {
 				if (kings & (1 << i))
-					data.first[0][i + 32] = 1;
-				data.first[0][i] = 1;
+					data.first.get(0, i + 32) = 1;
+				data.first.get(0, i) = 1;
 			}
 			if (enemies & (1 << i)) {
 				if (kings & (1 << i))
-					data.first[0][i + 96] = 1;
-				data.first[0][i + 64] = 1;
+					data.first.get(0, i + 96) = 1;
+				data.first.get(0, i + 64) = 1;
 			}
 		}
 		data.second = matrix(1, 1);
 		if (whiteWins >= 2.5 * blackWins && whiteWins >= 3)
-			data.second[0][0] = 1;
-		else data.second[0][0] = 0;
+			data.second.get(0, 0) = 1;
+		else data.second.get(0, 0) = 0;
 		//std::cout << white << " " << black << std::endl;
 		//for (int i = 0; i < 8; i++)
 		//	std::cout << data.second[0][i];

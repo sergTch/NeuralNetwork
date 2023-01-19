@@ -5,17 +5,17 @@
 
 namespace pictures {
 	void showImageTest(std::pair<matrix, matrix>& image) {
-		int size = sqrt(image.first[0].size());
+		int size = sqrt(image.first.n);
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				if (image.first[0][i * size + j] > 0.3)
+				if (image.first.get(0, i * size + j) > 0.3)
 					std::cout << "o ";
 				else std::cout << "  ";
 			}
 			std::cout << std::endl;
 		}
 		for (int i = 0; i < 10; i++) {
-			if (image.second[0][i] == 1)
+			if (image.second.get(0, i) == 1)
 				std::cout << i << std::endl;
 		}
 	}
@@ -172,7 +172,7 @@ namespace pictures {
 			int l = mnistData.labels(t);
 			dataSet[t].second = matrix(1, 10);
 			//std::cout << l << std::endl;
-			dataSet[t].second[0][l] = 1;
+			dataSet[t].second.get(0, l) = 1;
 			pointersSet[t] = &dataSet[t];
 		}
 	}

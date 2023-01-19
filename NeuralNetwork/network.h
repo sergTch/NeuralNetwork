@@ -1,5 +1,6 @@
 #pragma once
 #include "matrix.h"
+#include "layer.h"
 
 class network
 {
@@ -7,14 +8,12 @@ private:
 	std::vector<matrix> activations;
 	std::vector<matrix> sums;
 
-	int batchSize = 10;
 	double eta = 0.3;
+	size_t curBatch;
 
-	static double activate(double x);
-	static double activDeriv(double x);
 public:
-	std::vector<matrix> biases;
-	std::vector<matrix> weights;
+	std::vector<layer> layers;
+	std::vector<layer> lderiv;
 	int size;
 
 	network();
@@ -25,13 +24,14 @@ public:
 	void save(std::string dir);
 
 	matrix& feed(matrix& input);
-	double SGD(std::vector<std::pair<matrix,matrix>*>& data, std::vector<std::pair<matrix, matrix>*>& testData);
-	void backprop(matrix& input, matrix& output, std::vector<matrix>& dbDeriv, std::vector<matrix>& dwDeriv);
-	
+	double test(std::vector<std::pair<matrix, matrix>*>& testData);
+	void SGD(std::vector<std::pair<matrix,matrix>*>& data, int batchSize=10);
+	void backprop(matrix& input, matrix& output);
+	void applyGrad();
+
 	int evaluateClasification(std::pair<matrix, matrix>* test);
 	int evaluateEstimation(std::pair<matrix, matrix>* test);
 	
-	void compare(network& ann);
 	void print();
 };
 
