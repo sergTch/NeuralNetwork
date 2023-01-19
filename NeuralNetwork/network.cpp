@@ -9,8 +9,6 @@
 int network::evaluateClasification(std::pair<matrix, matrix>* test) {
 	matrix& output = feed(test->first);
 
-	//output.print();
-	//test->second.print();
 	double max = 0;
 	int t = 0;
 	for (int i = 0; i < test->second.n; i++) {
@@ -33,8 +31,6 @@ network::network() {
 	size = 0;
 	activations = std::vector<matrix>();
 	sums = std::vector<matrix>();
-	//biases = std::vector<matrix>();
-	//weights = std::vector<matrix>();
 	layers = std::vector<layer>();
 	lderiv = std::vector<layer>();
 }
