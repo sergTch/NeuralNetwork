@@ -51,12 +51,14 @@ void matrix::save(const std::string& file) const {
 void matrix::load(const std::string& file) {
 	std::ifstream f(file);
 	f >> m >> n;
+	istep = n;
+	jstep = 1;
 
 	data = std::shared_ptr<double[]>(new double[m * n]);
-	for (size_t i = 0; i < m; i++) {
+	for (size_t i = 0; i < m; i++)
 		for (size_t j = 0; j < n; j++)
 			f >> get(i, j);
-	}
+
 	f.close();
 }
 

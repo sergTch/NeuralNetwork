@@ -8,16 +8,21 @@ private:
 	std::vector<matrix> activations;
 	std::vector<matrix> sums;
 
-	double eta = 0.3;
 	size_t curBatch;
+	
+	void connectLayerOuts();
 
 public:
 	std::vector<layer> layers;
 	std::vector<layer> lderiv;
 	int size;
+	double eta = 0.3;
 
 	network();
 	network(std::vector<int>& layers);
+
+	void addLayer(size_t input, size_t output, actType atype);
+	void addLayer(size_t output, actType atype);
 
 	void removeNeuron(int i, int j);
 	void load(std::string dir);

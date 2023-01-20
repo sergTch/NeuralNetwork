@@ -5,7 +5,6 @@
 #include "time.h"
 #include "network.h"
 
-
 int network::evaluateClasification(std::pair<matrix, matrix>* test) {
 	matrix& output = feed(test->first);
 
@@ -25,6 +24,16 @@ int network::evaluateClasification(std::pair<matrix, matrix>* test) {
 int network::evaluateEstimation(std::pair<matrix, matrix>* test) {
 	matrix& output = feed(test->first);
 	return (test->second.get(0,0) - 0.5) * (output.get(0, 0) - 0.5) > 0;
+}
+
+void network::connectLayerOuts()
+{
+	for (int i = 0; i < size; i++) {
+		layers[i].out = &activations[i];
+		layers[i].sums = &sums[i];
+		lderiv[i].out = &activations[i];
+		lderiv[i].sums = &sums[i];
+	}
 }
 
 network::network() {
@@ -50,6 +59,30 @@ network::network(std::vector<int>& layersn) {
 	}
 
 	lderiv = layers;
+}
+
+void network::addLayer(size_t input, size_t output, actType atype)
+{
+	size++;
+	if (layers.size())
+		addLayer(output, atype);
+	else {
+		layers.push_back(layer(input, output, atype));
+		lderiv.push_back(layers.back());
+		activations.push_back(matrix(1, output));
+		sums.push_back(matrix(1, output));
+		connectLayerOuts();
+	}
+}
+
+void network::addLayer(size_t output, actType atype)
+{
+	size++;
+	layers.push_back(layer(sums.back().n, output, atype));
+	lderiv.push_back(layers.back());
+	activations.push_back(matrix(1, output));
+	sums.push_back(matrix(1, output));
+	connectLayerOuts();
 }
 
 matrix& network::feed(matrix& input) {
@@ -151,9 +184,12 @@ void network::load(std::string dir) {
 	for (int i = 0; i < size; i++) {
 		layers[i].B.load(dir + "\\" + std::to_string(i) + "biases.txt");
 		layers[i].W.load(dir + "\\" + std::to_string(i) + "weights.txt");
+		lderiv[i] = layers[i];
+		lderiv[i] = 0;
 		activations[i] = matrix(1, layers[i].B.n);
 		sums[i] = matrix(1, layers[i].B.n);
 	}
+	connectLayerOuts();
 }
 
 void network::save(std::string dir) {

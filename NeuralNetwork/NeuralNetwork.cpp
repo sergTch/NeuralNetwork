@@ -18,6 +18,10 @@ double f(double x) {
 	return x - 1;
 }
 
+std::shared_ptr<int> f(std::shared_ptr<int> p) {
+	return p;
+}
+
 int main(int argc, char** argv)
 {
 	//std::srand(time(NULL));
@@ -35,9 +39,16 @@ int main(int argc, char** argv)
 			<< trainData[0].second.m << " " << trainData[0].second.n << std::endl;
 		std::cout << "learning starts\n";
 
-		std::vector<int> vec{ 196, 40, 40, 10 };
-		network ann(vec);
-
+		std::vector<int> vec{ 196,40,40,10 };
+		//network ann(vec);
+		network ann;
+		ann.addLayer(196, 40, reluType);
+		ann.addLayer(40, sigmType);
+		ann.addLayer(10, sigmType);
+		ann.load("ANN");
+		rate = ann.test(testPointers);
+		std::cout << rate << std::endl;
+		
 		int k = 0;
 		for (int i = 0; i < 1000; i++) {
 			timer_restart();
