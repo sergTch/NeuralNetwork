@@ -38,8 +38,9 @@ public:
 	const double& get(size_t i, size_t j) const;
 
 	matrix T();
-	matrix sum(int axis) const;
+	const matrix T() const;
 
+	matrix sum(int axis) const;
 	double sum() const;
 
 	matrix& operator= (matrix&& A);

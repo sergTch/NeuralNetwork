@@ -106,6 +106,18 @@ matrix matrix::T()
 	return rez;
 }
 
+const matrix matrix::T() const
+{
+	matrix rez;
+	rez.data = data;
+	rez.m = n;
+	rez.n = m;
+	rez.istep = jstep;
+	rez.jstep = istep;
+
+	return rez;
+}
+
 matrix matrix::sum(int axis) const
 {
 	matrix rez;

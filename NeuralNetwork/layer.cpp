@@ -36,6 +36,9 @@ layer::layer(size_t input, size_t output, actType t) : W(input, output), B(1, ou
 	B.rand();
 }
 
+layer::layer(const layer& l) = default;
+layer::layer(layer&& l) = default;
+
 void layer::setAct(actType t)
 {
 	atype = t;
@@ -43,11 +46,17 @@ void layer::setAct(actType t)
 	activateD = activationDerivs[t];
 }
 
-void layer::feed(const matrix& input) const
+matrix layer::feed(const matrix& input) const
+{	
+	return (input * W).apply(activate);
+}
+
+matrix& layer::feed(const matrix& input, matrix& sums, matrix& out) const
 {
-	*sums = input * W;
-	*out = *sums;
-	out->apply(activate);
+	sums = input * W;
+	out = sums;
+	out.apply(activate);
+	return out;
 }
 
 size_t layer::inpSize() const
@@ -95,5 +104,5 @@ layer& layer::operator=(double t)
 	return *this;
 }
 
-//layer& layer::operator=(const layer& l) = default;
-//layer& layer::operator=(layer&& l) = default;
+layer& layer::operator=(const layer& l) = default;
+layer& layer::operator=(layer&& l) = default;

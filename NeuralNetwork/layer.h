@@ -19,18 +19,19 @@ public:
 	actType atype;
 	matrix W;
 	matrix B;
-	matrix* sums = nullptr;
-	matrix* out = nullptr;
 	
 	double (*activate)(double);
 	double (*activateD)(double);
 
 	layer();
 	layer(size_t input, size_t output, actType t);
+	layer(const layer& l);
+	layer(layer&& l);
 
 	void setAct(actType t);
 
-	void feed(const matrix& input) const;
+	matrix feed(const matrix& input) const;
+	matrix& feed(const matrix& input, matrix& sums, matrix& out) const;
 	
 	size_t inpSize() const;
 	size_t outSize() const;
@@ -41,6 +42,6 @@ public:
 	layer& operator /= (double t);
 	layer& operator = (double t);
 
-	//layer& operator = (const layer& l);
-	//layer& operator = (layer&& l);
+	layer& operator = (const layer& l);
+	layer& operator = (layer&& l);
 };

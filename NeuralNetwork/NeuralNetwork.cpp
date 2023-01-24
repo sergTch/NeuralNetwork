@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 		ann.addLayer(196, 40, reluType);
 		ann.addLayer(40, sigmType);
 		ann.addLayer(10, sigmType);
-		ann.load("ANN");
+		//ann.load("ANN");
 		rate = ann.test(testPointers);
 		std::cout << rate << std::endl;
 		

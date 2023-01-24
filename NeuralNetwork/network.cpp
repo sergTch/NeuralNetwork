@@ -6,7 +6,7 @@
 #include "network.h"
 
 int network::evaluateClasification(std::pair<matrix, matrix>* test) {
-	matrix& output = feed(test->first);
+	matrix output = feed(test->first);
 
 	double max = 0;
 	int t = 0;
@@ -22,43 +22,27 @@ int network::evaluateClasification(std::pair<matrix, matrix>* test) {
 }
 
 int network::evaluateEstimation(std::pair<matrix, matrix>* test) {
-	matrix& output = feed(test->first);
+	matrix output = feed(test->first);
 	return (test->second.get(0,0) - 0.5) * (output.get(0, 0) - 0.5) > 0;
-}
-
-void network::connectLayerOuts()
-{
-	for (int i = 0; i < size; i++) {
-		layers[i].out = &activations[i];
-		layers[i].sums = &sums[i];
-		lderiv[i].out = &activations[i];
-		lderiv[i].sums = &sums[i];
-	}
 }
 
 network::network() {
 	size = 0;
-	activations = std::vector<matrix>();
-	sums = std::vector<matrix>();
 	layers = std::vector<layer>();
 	lderiv = std::vector<layer>();
+	outn = 0;
 }
 
-network::network(std::vector<int>& layersn) {
+network::network(const std::vector<int>& layersn) {
 	size = layersn.size() - 1;
-	activations = std::vector<matrix>(size);
-	sums = std::vector<matrix>(size);
 	layers = std::vector<layer>(size);
 
 	for (int i = 0; i < size; i++){
 		layers[i] = layer(layersn[i], layersn[i + 1], sigmType);
-		layers[i].out = &activations[i];
-		layers[i].sums = &sums[i];
-		activations[i] = matrix(1, layersn[i + 1]);
-		sums[i] = matrix(1, layersn[i + 1]);
 	}
 
 	lderiv = layers;
+	outn = layersn.back();
 }
 
 void network::addLayer(size_t input, size_t output, actType atype)
@@ -69,27 +53,33 @@ void network::addLayer(size_t input, size_t output, actType atype)
 	else {
 		layers.push_back(layer(input, output, atype));
 		lderiv.push_back(layers.back());
-		activations.push_back(matrix(1, output));
-		sums.push_back(matrix(1, output));
-		connectLayerOuts();
 	}
+	outn = output;
 }
 
 void network::addLayer(size_t output, actType atype)
 {
 	size++;
-	layers.push_back(layer(sums.back().n, output, atype));
+	layers.push_back(layer(outn, output, atype));
 	lderiv.push_back(layers.back());
-	activations.push_back(matrix(1, output));
-	sums.push_back(matrix(1, output));
-	connectLayerOuts();
+	outn = output;
 }
 
-matrix& network::feed(matrix& input) {
-	layers[0].feed(input);
+matrix network::feed(const matrix& input) {
+	matrix rez = layers[0].feed(input);
 
 	for (int i = 1; i < size; i++)
-		layers[i].feed(*layers[i - 1].out);
+		rez = layers[i].feed(rez);
+
+	return rez;
+}
+
+matrix network::feed(const matrix& input, std::vector<matrix>& sums, std::vector<matrix>& activations)
+{
+	layers[0].feed(input, sums[0], activations[0]);
+
+	for (int i = 1; i < size; i++)
+		layers[i].feed(activations[i - 1], sums[i], activations[i]);
 
 	return activations.back();
 }
@@ -116,9 +106,10 @@ void network::SGD(std::vector<std::pair<matrix, matrix>*>& data, int batchSize) 
 	}
 }
 
-void network::backprop(matrix& input, matrix& output) {
+void network::backprop(const matrix& input, const matrix& output) {
 	curBatch++;
-	feed(input);
+	std::vector<matrix> sums(size), activations(size);
+	feed(input, sums, activations);
 	int t = size - 1;
 
 	matrix dB, dW;
@@ -162,17 +153,13 @@ void network::print() {
 
 void network::removeNeuron(int i, int j) {
 	layers[i].B.removeCol(j);
-	sums[i].removeCol(j);
-	activations[i].removeCol(j);
 	layers[i].W.removeCol(j);
 	layers[i].W.removeRow(j);
 }
 
-void network::load(std::string dir) {
+void network::load(const std::string& dir) {
 	std::ifstream f(dir + "/data.txt");
 	f >> size;
-	activations = std::vector<matrix>(size);
-	sums = std::vector<matrix>(size);
 	layers = std::vector<layer>(size);
 	for (int i = 0; i < size; i++) {
 		size_t atype;
@@ -186,13 +173,10 @@ void network::load(std::string dir) {
 		layers[i].W.load(dir + "\\" + std::to_string(i) + "weights.txt");
 		lderiv[i] = layers[i];
 		lderiv[i] = 0;
-		activations[i] = matrix(1, layers[i].B.n);
-		sums[i] = matrix(1, layers[i].B.n);
 	}
-	connectLayerOuts();
 }
 
-void network::save(std::string dir) {
+void network::save(const std::string& dir) {
 	system(("mkdir " + dir).c_str());
 	std::ofstream f(dir + "\\data.txt");
 	f << size << "\n";
