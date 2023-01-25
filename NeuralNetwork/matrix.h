@@ -18,6 +18,7 @@ public:
 
 	matrix();
 	matrix(std::vector<double> vec);
+	matrix(double t);
 	matrix(size_t m, size_t n);
 	matrix(matrix&& A);
 	matrix(const matrix& A);

@@ -7,10 +7,13 @@ double sigm(double);
 double sigmDeriv(double);
 double relu(double);
 double reluDeriv(double);
+double linear(double);
+double linearDeriv(double);
 
 enum actType {
 	sigmType = 0,
-	reluType
+	reluType,
+	linearType
 };
 
 class layer

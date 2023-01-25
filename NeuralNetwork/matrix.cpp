@@ -11,6 +11,10 @@ matrix::matrix(std::vector<double> vec): m(1), n(vec.size()), data(new double[ve
 		data[i] = vec[i];
 }
 
+matrix::matrix(double t): m(1), n(1), istep(1), jstep(1), data(new double[1]) {
+	data[0] = 1;
+}
+
 matrix::matrix(size_t m, size_t n) : m(m), n(n), data(new double[m * n]), 
 									 istep(n), jstep(1) { 
 	for (int i = 0; i < m * n; i++)
