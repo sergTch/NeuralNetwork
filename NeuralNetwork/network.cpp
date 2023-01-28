@@ -145,7 +145,7 @@ void network::applyGrad(network& deriv, double eta)
 	deriv.curBatch = 1;
 }
 
-void network::print() {
+void network::print() const {
 	for (int i = 0; i < size; i++) {
 		layers[i].B.print();
 		layers[i].W.print();
@@ -176,7 +176,7 @@ void network::load(const std::string& dir) {
 }
 
 struct stat info;
-void network::save(const std::string& dir) {
+void network::save(const std::string& dir) const {
 	if (stat(dir.c_str(), &info) != 0)
 		system(("mkdir " + dir).c_str());
 	std::ofstream f(dir + "\\data.txt");

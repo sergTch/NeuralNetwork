@@ -24,7 +24,7 @@ public:
 
 	void removeNeuron(int i, int j);
 	void load(const std::string& dir);
-	void save(const std::string& dir);
+	void save(const std::string& dir) const;
 	void zero();
 
 	matrix feed(const matrix& input) const;
@@ -36,6 +36,6 @@ public:
 
 	int evaluateClasification(std::pair<matrix, matrix>& test) const;
 	
-	void print();
+	void print() const;
 };
 
