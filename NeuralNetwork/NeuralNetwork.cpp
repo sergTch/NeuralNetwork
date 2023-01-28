@@ -18,6 +18,21 @@
 
 int main(int argc, char** argv)
 {
+	double t = 10;
+	matrix m(4, 4);
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			m.get(i, j) = t++;
+
+	m.print();
+	matrix sl = m.slice(2, 2);
+	sl.print();
+	sl = 88;
+	sl.print();
+	m.print();
+
+	return 0;
+
 	//std::srand(time(NULL));
 
 	//if (argc == 1 || argv[1] == "train") {

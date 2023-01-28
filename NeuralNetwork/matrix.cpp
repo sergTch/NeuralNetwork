@@ -122,6 +122,30 @@ const matrix matrix::T() const
 	return rez;
 }
 
+matrix matrix::slice(size_t ichange, size_t jchange)
+{
+	matrix rez;
+	rez.data = data;
+	rez.m = m / ichange;
+	rez.n = n / jchange;
+	rez.istep = istep * ichange;
+	rez.jstep = jstep * jchange;
+	
+	return rez;
+}
+
+const matrix matrix::slice(size_t ichange, size_t jchange) const
+{
+	matrix rez;
+	rez.data = data;
+	rez.m = m / ichange;
+	rez.n = n / jchange;
+	rez.istep = istep * ichange;
+	rez.jstep = jstep * jchange;
+
+	return rez;
+}
+
 matrix matrix::sum(int axis) const
 {
 	matrix rez;
@@ -156,6 +180,7 @@ void matrix::print() const {
 			std::cout << get(i, j) << " ";
 		std::cout << "\n";
 	}
+	std::cout << std::endl;
 }
 
 matrix& matrix::apply(double(*f)(double))

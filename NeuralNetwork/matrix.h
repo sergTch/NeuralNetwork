@@ -41,6 +41,9 @@ public:
 	matrix T();
 	const matrix T() const;
 
+	matrix slice(size_t ichange, size_t jchange);
+	const matrix slice(size_t ichange, size_t jchange) const;
+
 	matrix sum(int axis) const;
 	double sum() const;
 
