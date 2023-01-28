@@ -144,11 +144,9 @@ namespace pictures {
 		image = newImage;
 	}
 
-	void prepareData(std::vector<std::pair<matrix, matrix>>& dataSet,
-		std::vector<std::pair<matrix, matrix>*>& pointersSet, mnist_loader& mnistData)
+	void prepareData(std::vector<std::pair<matrix, matrix>>& dataSet, mnist_loader& mnistData)
 	{
 		dataSet = std::vector<std::pair<matrix, matrix>>(mnistData.size());
-		pointersSet = std::vector<std::pair<matrix, matrix>*>(mnistData.size());
 		for (int t = 0; t < mnistData.size(); t++) {
 			//trainData[t].first = matrix(train.images(t));
 			dataSet[t].first = matrix(1, 196);
@@ -173,18 +171,16 @@ namespace pictures {
 			dataSet[t].second = matrix(1, 10);
 			//std::cout << l << std::endl;
 			dataSet[t].second.get(0, l) = 1;
-			pointersSet[t] = &dataSet[t];
 		}
 	}
 
-	void loadData(std::vector<std::pair<matrix, matrix>>& trainData, std::vector<std::pair<matrix, matrix>>& testData,
-		std::vector<std::pair<matrix, matrix>*>& trainPointers, std::vector<std::pair<matrix, matrix>*>& testPointers,
-		std::string path) {
+	void loadData(std::vector<std::pair<matrix, matrix>>& trainData, 
+		std::vector<std::pair<matrix, matrix>>& testData, std::string path) {
 		mnist_loader train(path + "/train-images-idx3-ubyte",
 			"dataset/train-labels-idx1-ubyte");
 		mnist_loader test(path + "/t10k-images-idx3-ubyte",
 			"dataset/t10k-labels-idx1-ubyte");
-		pictures::prepareData(trainData, trainPointers, train);
-		pictures::prepareData(testData, testPointers, test);
+		pictures::prepareData(trainData, train);
+		pictures::prepareData(testData, test);
 	}
 }

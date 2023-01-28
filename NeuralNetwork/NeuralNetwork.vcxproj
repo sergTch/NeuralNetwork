@@ -127,7 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="checkers.cpp" />
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="mnist_loader.cpp" />
@@ -137,7 +136,6 @@
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="checkers.h" />
     <ClInclude Include="layer.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="mnist_loader.h" />

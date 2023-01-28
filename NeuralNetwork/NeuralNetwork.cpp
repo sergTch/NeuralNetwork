@@ -6,21 +6,15 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <thread>
+#include <functional>
 #include "time.h"
 #include "matrix.h"
 #include "network.h"
 #include "mnist_loader.h"
 #include "picture.h"
-#include "checkers.h"
 #include "timer.h"
 
-double f(double x) {
-	return x - 1;
-}
-
-std::shared_ptr<int> f(std::shared_ptr<int> p) {
-	return p;
-}
 
 int main(int argc, char** argv)
 {
@@ -30,43 +24,38 @@ int main(int argc, char** argv)
 	if (true) {
 		double rate, rateTrain;
 		std::vector<std::pair<matrix, matrix>> trainData(0), testData(0);
-		std::vector<std::pair<matrix, matrix>*> trainPointers(0), testPointers(0);
-
-		pictures::loadData(trainData, testData, trainPointers, testPointers, "dataset");
-		//checkers::loadData(trainData, testData, trainPointers, testPointers, 20,"positions.txt");
+		pictures::loadData(trainData, testData, "dataset");
 
 		std::cout << trainData[0].first.m << " " << trainData[0].first.n << std::endl
 			<< trainData[0].second.m << " " << trainData[0].second.n << std::endl;
 		std::cout << "learning starts\n";
 
-		std::vector<int> vec{ 196,40,40,10 };
-		//network ann(vec);
 		network ann;
-		ann.addLayer(196, 40, reluType);
+		ann.addLayer(196, 40, sigmType);
 		ann.addLayer(40, sigmType);
 		ann.addLayer(10, sigmType);
-		//ann.load("ANN");
-		rate = ann.test(testPointers);
+		ann.load("ANN");
+		rate = ann.test(testData);
 		std::cout << rate << std::endl;
 		
+		auto trainF = [&ann, &trainData]() {
+			ann.SGD(trainData, 0.05, 20);
+		};
+
 		int k = 0;
 		for (int i = 0; i < 1000; i++) {
 			timer_restart();
 			std::cout << i << std::endl;
-			ann.SGD(trainPointers);
-			ann.SGD(trainPointers);
 
-			rateTrain = ann.test(testPointers);
-			rate = ann.test(testPointers);
+			size_t tn = 20;
+			std::vector<std::thread> threads(tn);
+			for (int t = 0; t < tn; t++)
+				threads[t] = std::thread(trainF);
+			for (int t = 0; t < tn; t++)
+				threads[t].join();
 
+			rate = ann.test(testData);
 			std::cout << rate << std::endl;
-			if (rate > 0.98 && rateTrain > 0.99 && ann.layers[0].B.n > 1) {
-				for (int k = 0; k < ann.size; k++)
-					std::cout << ann.layers[k].W.m << " ";
-				std::cout << "\nRemoving neurons\n";
-				ann.removeNeuron(0, 0);
-				ann.removeNeuron(1, 0);
-			}
 			ann.save("ANN");
 		}
 	}
