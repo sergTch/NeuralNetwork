@@ -152,12 +152,6 @@ void network::print() const {
 	}
 }
 
-void network::removeNeuron(int i, int j) {
-	layers[i].B.removeCol(j);
-	layers[i].W.removeCol(j);
-	layers[i].W.removeRow(j);
-}
-
 void network::load(const std::string& dir) {
 	std::ifstream f(dir + "/data.txt");
 	f >> size;

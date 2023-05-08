@@ -22,7 +22,6 @@ public:
 	void addLayer(size_t input, size_t output, actType atype);
 	void addLayer(size_t output, actType atype);
 
-	void removeNeuron(int i, int j);
 	void load(const std::string& dir);
 	void save(const std::string& dir) const;
 	void zero();

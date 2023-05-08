@@ -22,11 +22,10 @@ public:
 	matrix(size_t m, size_t n);
 	matrix(matrix&& A);
 	matrix(const matrix& A);
-
-	void removeCol(size_t k);
-	void removeRow(size_t k);
+	
 	void zero();
 	void rand();
+	void reference(matrix& A);
 	void load(const std::string& file);
 	void save(const std::string& file) const;
 	void print() const;

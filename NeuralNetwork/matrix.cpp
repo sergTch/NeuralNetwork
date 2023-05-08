@@ -23,7 +23,7 @@ matrix::matrix(size_t m, size_t n) : m(m), n(n), data(new double[m * n]),
 
 matrix::matrix(matrix&& A) = default;
 
-matrix::matrix(const matrix& A): m(A.m), n(A.n), istep(A.istep), jstep(A.jstep) {
+matrix::matrix(const matrix& A): m(A.m), n(A.n), istep(1), jstep(A.m) {
 	data = std::shared_ptr<double[]>(new double[m * n]);
 	for (int i = 0; i < m; i++)
 		for (int j = 0; j < n; j++)
@@ -40,6 +40,15 @@ void matrix::rand() {
 	for (size_t i = 0; i < m; i++)
 		for (size_t j = 0; j < n; j++)
 			get(i, j) = std::rand() % 2001 * 0.001 - 1;
+}
+
+void matrix::reference(matrix& A)
+{
+	m = A.m;
+	n = A.n;
+	istep = A.istep;
+	jstep = A.jstep;
+	data = A.data;
 }
 
 void matrix::save(const std::string& file) const {
@@ -64,38 +73,6 @@ void matrix::load(const std::string& file) {
 			f >> get(i, j);
 
 	f.close();
-}
-
-void matrix::removeCol(size_t k) {
-	//std::vector<std::vector<double>> newVals(m);
-	//for (size_t i = 0; i < m; i++) {
-	//	newVals[i] = std::vector<double>(n - 1);
-	//	size_t t = 0;
-	//	for (size_t j = 0; j < n; j++) {
-	//		if (j == k)
-	//			j++;
-	//		newVals[i][t] = vals[i][j];
-	//		t++;
-	//	}
-	//}
-	//vals = newVals;
-	//n--;
-}
-
-void matrix::removeRow(size_t k) {
-	//std::vector<std::vector<double>> newVals(m - 1);
-	//size_t t = 0;
-	//for (size_t i = 0; i < m; i++) {
-	//	if (i == k)
-	//		i++;
-	//	newVals[t] = std::vector<double>(n);
-	//	for (size_t j = 0; j < n; j++) {
-	//		newVals[t][j] = vals[i][j];
-	//	}
-	//	t++;
-	//}
-	//vals = newVals;
-	//m--;
 }
 
 matrix matrix::T()
@@ -229,8 +206,8 @@ matrix& matrix::operator = (matrix&& A) = default;
 matrix& matrix::operator = (const matrix& A) {
 	m = A.m;
 	n = A.n;
-	istep = A.istep;
-	jstep = A.jstep;
+	istep = 1;
+	jstep = m;
 	data = std::shared_ptr<double[]>(new double[m * n]);
 	for (int i = 0; i < m; i++)
 		for (int j = 0; j < n; j++)
