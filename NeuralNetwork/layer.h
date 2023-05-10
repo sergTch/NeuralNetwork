@@ -9,8 +9,8 @@ double relu(double);
 double reluDeriv(double);
 double linear(double);
 double linearDeriv(double);
-double tanh(double);
-double tanhDeriv(double);
+double tanhf(double);
+double tanhfDeriv(double);
 
 enum actType {
 	sigmType = 0,

@@ -2,7 +2,7 @@
 #include <algorithm>
 
 std::vector<double(*)(double)> activations = { sigm, relu, linear, tanh };
-std::vector<double(*)(double)> activationDerivs = { sigmDeriv, reluDeriv, linearDeriv, tanhDeriv };
+std::vector<double(*)(double)> activationDerivs = { sigmDeriv, reluDeriv, linearDeriv, tanhfDeriv };
 
 double sigm(double x)
 {
@@ -36,13 +36,13 @@ double linearDeriv(double x)
 	return 1;
 }
 
-double tanh(double x)
+double tanhf(double x)
 {
 	double e = exp(-2 * x);
 	return (1 - e) / (1 + e);
 }
 
-double tanhDeriv(double x)
+double tanhfDeriv(double x)
 {
 	double e = exp(2 * x);
 	return 4 * e / ((1 + e) * (1 + e));
