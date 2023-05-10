@@ -1,8 +1,8 @@
 #include "layer.h"
 #include <algorithm>
 
-std::vector<double(*)(double)> activations = { sigm, relu, linear };
-std::vector<double(*)(double)> activationDerivs = { sigmDeriv, reluDeriv, linearDeriv };
+std::vector<double(*)(double)> activations = { sigm, relu, linear, tanh };
+std::vector<double(*)(double)> activationDerivs = { sigmDeriv, reluDeriv, linearDeriv, tanhDeriv };
 
 double sigm(double x)
 {
@@ -13,7 +13,7 @@ double sigm(double x)
 double sigmDeriv(double x)
 {
 	double e = exp(-x);
-	return e / (e + 1) / (e + 1);
+	return e / ((e + 1) * (e + 1));
 }
 
 double relu(double x)
@@ -34,6 +34,18 @@ double linear(double x)
 double linearDeriv(double x)
 {
 	return 1;
+}
+
+double tanh(double x)
+{
+	double e = exp(-2 * x);
+	return (1 - e) / (1 + e);
+}
+
+double tanhDeriv(double x)
+{
+	double e = exp(2 * x);
+	return 4 * e / ((1 + e) * (1 + e));
 }
 
 layer::layer(): activate(nullptr), activateD(nullptr), atype(sigmType) {}
