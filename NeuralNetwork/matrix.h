@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <algorithm>
+#include <iostream>
 
 class matrix
 {
@@ -34,8 +35,10 @@ public:
 	matrix& elemMult(const matrix& A);
 	matrix& elemDiv(const matrix& A);
 
-	double& get(size_t i, size_t j);
-	const double& get(size_t i, size_t j) const;
+	double& get(size_t i, size_t j = 0);
+	const double& get(size_t i, size_t j = 0) const;
+
+	void show(std::ostream& out);
 
 	matrix T();
 	const matrix T() const;

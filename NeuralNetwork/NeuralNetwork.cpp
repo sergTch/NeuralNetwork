@@ -17,7 +17,7 @@
 
 
 void mnist_train() {
-	double rate, rateTrain;
+	double rate;
 	std::vector<std::pair<matrix, matrix>> trainData(0), testData(0);
 	pictures::loadData(trainData, testData, "dataset");
 
@@ -34,7 +34,7 @@ void mnist_train() {
 	std::cout << rate << std::endl;
 
 	auto trainF = [&ann, &trainData]() {
-		ann.SGD(trainData, 0.3, 20);
+		ann.SGD(trainData, 0.3, 10);
 	};
 
 	int k = 0;

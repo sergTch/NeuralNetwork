@@ -2,11 +2,12 @@
 #include "matrix.h"
 #include "layer.h"
 #include <mutex>
+#include <shared_mutex>
 
 class network
 {
 private:
-	std::mutex gmutex;
+	mutable std::shared_mutex gmutex;
 
 public:
 	size_t curBatch = 1;
@@ -29,9 +30,9 @@ public:
 	matrix feed(const matrix& input) const;
 	matrix feed(const matrix& input, std::vector<matrix>& sums, std::vector<matrix>& activations) const;
 	double test(std::vector<std::pair<matrix, matrix>>& testData) const;
-	void SGD(const std::vector<std::pair<matrix,matrix>>& data, double eta = 0.3, int batchSize=10);
+	void SGD(const std::vector<std::pair<matrix,matrix>>& data, double eta = 0.1, int batchSize=10);
 	void backprop(const matrix& input, const matrix& output, const network& net);
-	void applyGrad(network& deriv, double eta);
+	void applyGrad(network& deriv, double eta = 0.1);
 
 	int evaluateClasification(std::pair<matrix, matrix>& test) const;
 	

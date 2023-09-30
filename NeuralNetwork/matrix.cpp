@@ -146,6 +146,16 @@ const double& matrix::get(size_t i, size_t j) const
 	return data[i * istep + j * jstep];
 }
 
+void matrix::show(std::ostream& out)
+{
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			out << get(i, j) << " ";
+		}
+		out << "\n";
+	}
+}
+
 double& matrix::get(size_t i, size_t j)
 {
 	return data[i * istep + j * jstep];
